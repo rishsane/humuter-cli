@@ -4,7 +4,7 @@ from textual.app import ComposeResult
 from textual.containers import Horizontal, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Header, Input, Label, Static
-from textual.worker import work
+from textual import work
 
 
 class ChatScreen(Screen):

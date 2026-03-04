@@ -25,4 +25,4 @@ humuter = "humuter.cli:main"
 include = ["humuter*"]
 
 [tool.setuptools.package-data]
-humuter = ["*.tcss"]
+"humuter.tui" = ["*.tcss"]
