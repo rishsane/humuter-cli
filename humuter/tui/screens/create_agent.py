@@ -68,7 +68,7 @@ class CreateAgentScreen(Screen):
             ),
 
             # Training data
-            Static("\n  [bold orange1]Training Data[/bold orange1] [dim](optional — you can edit later)[/dim]\n"),
+            Static("\n  [bold #ff8c00]Training Data[/bold #ff8c00] [dim](optional — you can edit later)[/dim]\n"),
 
             Label("  Project Name", classes="form-label"),
             Input(placeholder="Acme Protocol", id="inp-project", classes="form-group"),

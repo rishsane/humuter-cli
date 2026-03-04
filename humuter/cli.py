@@ -10,11 +10,11 @@ from humuter import __version__
 console = Console()
 
 BANNER = """
-[bold orange1]  ██   ██ ██    ██ ███    ███ ██    ██ ████████ ███████ ██████[/bold orange1]
-[bold orange1]  ██   ██ ██    ██ ████  ████ ██    ██    ██    ██      ██   ██[/bold orange1]
-[bold orange1]  ███████ ██    ██ ██ ████ ██ ██    ██    ██    █████   ██████[/bold orange1]
-[bold orange1]  ██   ██ ██    ██ ██  ██  ██ ██    ██    ██    ██      ██   ██[/bold orange1]
-[bold orange1]  ██   ██  ██████  ██      ██  ██████     ██    ███████ ██   ██[/bold orange1]
+[bold #ff8c00]  ██   ██ ██    ██ ███    ███ ██    ██ ████████ ███████ ██████[/bold #ff8c00]
+[bold #ff8c00]  ██   ██ ██    ██ ████  ████ ██    ██    ██    ██      ██   ██[/bold #ff8c00]
+[bold #ff8c00]  ███████ ██    ██ ██ ████ ██ ██    ██    ██    █████   ██████[/bold #ff8c00]
+[bold #ff8c00]  ██   ██ ██    ██ ██  ██  ██ ██    ██    ██    ██      ██   ██[/bold #ff8c00]
+[bold #ff8c00]  ██   ██  ██████  ██      ██  ██████     ██    ███████ ██   ██[/bold #ff8c00]
 """
 
 

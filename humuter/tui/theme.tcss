@@ -1,17 +1,23 @@
-/* Humuter TUI Theme — orange accent, dark background */
+/* Humuter TUI Theme — #ff8c00 orange accent, dark background */
 
 Screen {
     background: $surface;
 }
 
 Header {
-    background: #1a1a2e;
+    background: #111118;
     color: #ff8c00;
     text-style: bold;
 }
 
 Footer {
-    background: #1a1a2e;
+    background: #111118;
+    color: #aaa;
+}
+
+Footer > .footer--key {
+    background: #ff8c00;
+    color: #111118;
 }
 
 /* Shared panel styles */
@@ -19,7 +25,6 @@ Footer {
     border: solid #333;
     padding: 1 2;
     margin: 1;
-    background: $surface;
 }
 
 .panel-title {
@@ -36,16 +41,18 @@ Footer {
 }
 
 .stat-card {
-    border: solid #333;
+    border: solid #444;
     padding: 1 2;
     margin: 0 1;
     width: 1fr;
     height: auto;
     min-height: 5;
+    background: #111118;
 }
 
 .stat-label {
     color: #888;
+    text-style: bold;
 }
 
 .stat-value {
@@ -66,25 +73,35 @@ DataTable {
 DataTable > .datatable--header {
     color: #ff8c00;
     text-style: bold;
-    background: #1a1a2e;
+    background: #111118;
 }
 
 DataTable > .datatable--cursor {
-    background: #333;
-    color: white;
+    background: #ff8c00;
+    color: #111118;
+}
+
+DataTable > .datatable--even-row {
+    background: #0d0d14;
 }
 
 /* Buttons */
 Button {
     margin: 0 1;
+    min-width: 16;
 }
 
 Button.primary {
     background: #ff8c00;
-    color: black;
+    color: #111118;
+    text-style: bold;
 }
 
 Button.primary:hover {
+    background: #ffaa33;
+}
+
+Button.primary:focus {
     background: #ffaa33;
 }
 
@@ -93,19 +110,31 @@ Button.danger {
     color: white;
 }
 
+Button.danger:hover {
+    background: #f87171;
+}
+
 /* Input fields */
 Input {
-    margin: 0 0 1 0;
-    border: solid #555;
+    margin: 0 1 1 1;
+    border: solid #444;
 }
 
 Input:focus {
     border: solid #ff8c00;
 }
 
+Input.-valid {
+    border: solid #4ade80;
+}
+
 /* Select */
 Select {
-    margin: 0 0 1 0;
+    margin: 0 1 1 1;
+}
+
+Select:focus {
+    border: solid #ff8c00;
 }
 
 /* Chat screen */
@@ -115,6 +144,7 @@ Select {
     padding: 1;
     margin: 1;
     overflow-y: auto;
+    background: #0d0d14;
 }
 
 #chat-input-row {
@@ -128,7 +158,7 @@ Select {
 }
 
 #chat-send {
-    width: 12;
+    width: 14;
 }
 
 /* Welcome banner */
@@ -136,7 +166,7 @@ Select {
     text-align: center;
     color: #ff8c00;
     text-style: bold;
-    margin: 1;
+    margin: 1 0 0 0;
 }
 
 .subtitle {
@@ -161,13 +191,7 @@ Select {
 
 .form-label {
     color: #ccc;
-    margin-bottom: 0;
-}
-
-/* Scrollable container */
-.scroll-panel {
-    overflow-y: auto;
-    padding: 1;
+    margin: 0 0 0 1;
 }
 
 /* Agent detail */
@@ -201,4 +225,25 @@ Select {
     text-align: center;
     color: #888;
     margin: 2;
+}
+
+/* Chart container */
+.chart-container {
+    height: 16;
+    margin: 0 1;
+    border: solid #333;
+    background: #0d0d14;
+}
+
+PlotextPlot {
+    height: 16;
+    margin: 0 1;
+    background: #0d0d14;
+}
+
+/* Scrollable containers */
+VerticalScroll {
+    scrollbar-color: #ff8c00;
+    scrollbar-color-hover: #ffaa33;
+    scrollbar-color-active: #ffcc66;
 }
