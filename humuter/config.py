@@ -8,7 +8,7 @@ CONFIG_DIR = Path.home() / ".humuter"
 CREDENTIALS_FILE = CONFIG_DIR / "credentials.json"
 CONFIG_FILE = CONFIG_DIR / "config.json"
 
-API_BASE = os.environ.get("HUMUTER_API_URL", "https://humuter.com")
+API_BASE = os.environ.get("HUMUTER_API_URL", "https://platform.humuter.com")
 
 
 def ensure_config_dir():
