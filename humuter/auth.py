@@ -12,6 +12,7 @@ from humuter import api
 from humuter.config import save_credentials, clear_credentials, load_credentials
 
 console = Console()
+ORANGE = "#ff8c00"
 
 
 def login():
@@ -21,7 +22,7 @@ def login():
         if not click.confirm("You're already logged in. Re-authenticate?", default=False):
             return
 
-    console.print("\n[bold]Authenticating with Humuter...[/bold]\n")
+    console.print(f"[bold]Authenticating with Humuter...[/bold]\n")
 
     try:
         session = api.create_cli_session()
@@ -36,7 +37,11 @@ def login():
     webbrowser.open(login_url)
 
     # Poll with animated spinner
-    with Live(Spinner("dots", text="[dim]Waiting for browser login...[/dim]"), refresh_per_second=10, console=console) as live:
+    with Live(
+        Spinner("dots", text="[dim]Waiting for browser login...[/dim]"),
+        refresh_per_second=10,
+        console=console,
+    ) as live:
         max_attempts = 300
         for i in range(max_attempts):
             time.sleep(2)
@@ -52,8 +57,8 @@ def login():
                 token = result["token"]
                 user_id = result.get("user_id", "")
                 save_credentials(token, user_id)
-                console.print("\n[green bold]Logged in successfully![/green bold]\n")
-                console.print("Run [bold #ff8c00]humuter[/bold #ff8c00] to launch the dashboard.\n")
+                from humuter.cli import show_post_login
+                show_post_login()
                 return
 
             if status == "expired":

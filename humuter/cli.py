@@ -1,7 +1,5 @@
 """Humuter CLI — Deploy AI agents from your terminal."""
 
-import sys
-
 import click
 from rich.console import Console
 
@@ -9,13 +7,49 @@ from humuter import __version__
 
 console = Console()
 
-BANNER = """
-[bold #ff8c00]  ██   ██ ██    ██ ███    ███ ██    ██ ████████ ███████ ██████[/bold #ff8c00]
-[bold #ff8c00]  ██   ██ ██    ██ ████  ████ ██    ██    ██    ██      ██   ██[/bold #ff8c00]
-[bold #ff8c00]  ███████ ██    ██ ██ ████ ██ ██    ██    ██    █████   ██████[/bold #ff8c00]
-[bold #ff8c00]  ██   ██ ██    ██ ██  ██  ██ ██    ██    ██    ██      ██   ██[/bold #ff8c00]
-[bold #ff8c00]  ██   ██  ██████  ██      ██  ██████     ██    ███████ ██   ██[/bold #ff8c00]
-"""
+# Exact brand orange
+ORANGE = "#ff8c00"
+
+BANNER = f"""\
+[bold {ORANGE}]  ██   ██ ██    ██ ███    ███ ██    ██ ████████ ███████ ██████[/]
+[bold {ORANGE}]  ██   ██ ██    ██ ████  ████ ██    ██    ██    ██      ██   ██[/]
+[bold {ORANGE}]  ███████ ██    ██ ██ ████ ██ ██    ██    ██    █████   ██████[/]
+[bold {ORANGE}]  ██   ██ ██    ██ ██  ██  ██ ██    ██    ██    ██      ██   ██[/]
+[bold {ORANGE}]  ██   ██  ██████  ██      ██  ██████     ██    ███████ ██   ██[/]"""
+
+
+def show_welcome():
+    """Show the welcome banner."""
+    console.print(BANNER)
+    console.print(f"  [dim]v{__version__}[/dim]\n")
+
+
+def show_post_login():
+    """Show what to do after successful login."""
+    console.print(f"\n  [green bold]Logged in successfully![/green bold]\n")
+    console.print(f"  [{ORANGE} bold]What's next?[/]")
+    console.print(f"  Run [{ORANGE} bold]humuter[/] to launch the interactive dashboard.\n")
+    console.print(f"  ┌{'─' * 50}┐")
+    console.print(f"  │  [{ORANGE}]humuter[/]        Launch dashboard              │")
+    console.print(f"  └{'─' * 50}┘\n")
+    console.print(f"  [bold]Dashboard shortcuts:[/bold]")
+    console.print(f"    [{ORANGE}]d[/]  Dashboard     [{ORANGE}]a[/]  Agents      [{ORANGE}]n[/]  New Agent")
+    console.print(f"    [{ORANGE}]b[/]  Billing       [{ORANGE}]c[/]  Chat        [{ORANGE}]q[/]  Quit")
+    console.print()
+    console.print(f"  [bold]Quick commands (skip dashboard):[/bold]")
+    console.print(f"    [{ORANGE}]humuter agents list[/]        List all agents")
+    console.print(f"    [{ORANGE}]humuter agents status ID[/]   Agent details")
+    console.print(f"    [{ORANGE}]humuter credits[/]            Check balance")
+    console.print()
+
+
+def show_not_logged_in():
+    """Show the not-logged-in screen with clear instructions."""
+    show_welcome()
+    console.print(f"  [yellow]Not logged in yet.[/yellow]\n")
+    console.print(f"  ┌{'─' * 50}┐")
+    console.print(f"  │  [{ORANGE}]humuter login[/]  Sign in via browser           │")
+    console.print(f"  └{'─' * 50}┘\n")
 
 
 @click.group(invoke_without_command=True)
@@ -24,12 +58,9 @@ BANNER = """
 def main(ctx):
     """Deploy AI agents from your terminal."""
     if ctx.invoked_subcommand is None:
-        # No subcommand — launch the TUI
         from humuter.config import load_credentials
         if not load_credentials():
-            console.print(BANNER)
-            console.print(f"  [dim]v{__version__}[/dim]\n")
-            console.print("  [yellow]Not logged in.[/yellow] Run [cyan]humuter login[/cyan] first.\n")
+            show_not_logged_in()
             return
         from humuter.tui.app import HumuterApp
         app = HumuterApp()
@@ -40,8 +71,7 @@ def main(ctx):
 def login():
     """Log in to your Humuter account via browser."""
     from humuter.auth import login as do_login
-    console.print(BANNER)
-    console.print(f"  [dim]v{__version__}[/dim]\n")
+    show_welcome()
     do_login()
 
 
@@ -60,7 +90,7 @@ def agents_cmd(action, agent_id):
     """Quick agent commands (list, status ID, delete ID)."""
     from humuter.config import load_credentials
     if not load_credentials():
-        console.print("[red]Not logged in. Run:[/red] [cyan]humuter login[/cyan]")
+        console.print(f"[red]Not logged in.[/red] Run [{ORANGE}]humuter login[/] first.")
         raise SystemExit(1)
 
     from humuter import api
@@ -68,7 +98,7 @@ def agents_cmd(action, agent_id):
     if action is None or action == "list":
         agents = api.list_agents()
         if not agents:
-            console.print("No agents yet. Run [cyan]humuter[/cyan] to create one.\n")
+            console.print(f"No agents yet. Run [{ORANGE}]humuter[/] to create one.\n")
             return
         for a in agents:
             status = "[green]active[/green]" if a["status"] == "active" else f"[yellow]{a['status']}[/yellow]"
@@ -86,7 +116,7 @@ def agents_cmd(action, agent_id):
             api.delete_agent(agent_id)
             console.print("[green]Deleted.[/green]")
     else:
-        console.print("Usage: humuter agents [list|status ID|delete ID]")
+        console.print(f"Usage: [{ORANGE}]humuter agents[/] [list|status ID|delete ID]")
 
 
 @main.command()
@@ -94,7 +124,7 @@ def credits():
     """Show credit balance."""
     from humuter.config import load_credentials
     if not load_credentials():
-        console.print("[red]Not logged in. Run:[/red] [cyan]humuter login[/cyan]")
+        console.print(f"[red]Not logged in.[/red] Run [{ORANGE}]humuter login[/] first.")
         raise SystemExit(1)
     from humuter import api
     stats = api.get_platform_stats()
