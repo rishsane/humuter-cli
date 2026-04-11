@@ -23,6 +23,7 @@ class AgentDetailScreen(Screen):
         super().__init__()
         self.agent_id = agent_id
         self._agent: dict = {}
+        self._confirm_delete = False
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -34,7 +35,7 @@ class AgentDetailScreen(Screen):
                 Button("Deploy Telegram", id="btn-deploy"),
                 Button("Configure", id="btn-configure"),
                 Button("Generate API Key", id="btn-apikey"),
-                Button("Delete", id="btn-delete", classes="danger"),
+                Button("Archive", id="btn-delete", classes="danger"),
             ),
             Static("", id="action-result"),
         )
@@ -103,7 +104,7 @@ class AgentDetailScreen(Screen):
         elif btn == "btn-apikey":
             self.gen_api_key()
         elif btn == "btn-delete":
-            self.delete_agent()
+            self._handle_delete()
 
     def action_chat_agent(self) -> None:
         from humuter.tui.screens.chat import ChatScreen
@@ -130,18 +131,36 @@ class AgentDetailScreen(Screen):
         except Exception as e:
             self.app.call_from_thread(self._show_result, f"[red]{e}[/red]")
 
+    def _handle_delete(self) -> None:
+        if not self._confirm_delete:
+            self._confirm_delete = True
+            name = self._agent.get("name", "this agent")
+            self._show_result(
+                f"[bold red]Are you sure you want to archive '{name}'?[/bold red]\n"
+                "  Press [bold]Archive[/bold] again to confirm, or [bold]Esc/Back[/bold] to cancel."
+            )
+            # Reset confirmation after 5 seconds if not acted on
+            self.set_timer(5.0, self._reset_confirm)
+        else:
+            self._confirm_delete = False
+            self.archive_agent()
+
+    def _reset_confirm(self) -> None:
+        if self._confirm_delete:
+            self._confirm_delete = False
+            self._show_result("")
+
     @work(thread=True)
-    def delete_agent(self) -> None:
+    def archive_agent(self) -> None:
         from humuter import api
         try:
             api.delete_agent(self.agent_id)
-            self.app.call_from_thread(self._show_result, "[green]Agent deleted.[/green]")
-            self.app.call_from_thread(self._go_back_after_delete)
+            self.app.call_from_thread(self._show_result, "[green]Agent archived.[/green]")
+            self.app.call_from_thread(self._go_back_after_archive)
         except Exception as e:
             self.app.call_from_thread(self._show_result, f"[red]{e}[/red]")
 
-    def _go_back_after_delete(self) -> None:
-        import asyncio
+    def _go_back_after_archive(self) -> None:
         self.set_timer(1.5, lambda: self.app.action_switch_screen("agents"))
 
     def action_go_back(self) -> None:

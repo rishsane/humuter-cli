@@ -15,12 +15,12 @@ def ensure_config_dir():
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def save_credentials(token: str, user_id: str):
+def save_credentials(token: str, user_id: str, refresh_token: str = ""):
     ensure_config_dir()
-    CREDENTIALS_FILE.write_text(json.dumps({
-        "token": token,
-        "user_id": user_id,
-    }, indent=2))
+    data = {"token": token, "user_id": user_id}
+    if refresh_token:
+        data["refresh_token"] = refresh_token
+    CREDENTIALS_FILE.write_text(json.dumps(data, indent=2))
     CREDENTIALS_FILE.chmod(0o600)
 
 
@@ -44,6 +44,11 @@ def clear_credentials():
 def get_token() -> str | None:
     creds = load_credentials()
     return creds["token"] if creds else None
+
+
+def get_refresh_token() -> str | None:
+    creds = load_credentials()
+    return creds.get("refresh_token") if creds else None
 
 
 def save_config(key: str, value: str):

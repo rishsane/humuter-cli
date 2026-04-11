@@ -56,7 +56,8 @@ def login():
                 live.stop()
                 token = result["token"]
                 user_id = result.get("user_id", "")
-                save_credentials(token, user_id)
+                refresh_token = result.get("refresh_token", "")
+                save_credentials(token, user_id, refresh_token)
                 from humuter.cli import show_post_login
                 show_post_login()
                 return
