@@ -113,6 +113,25 @@ humuter-cli (this repo, Python + Textual)
                     └── Restext (RAG)
 ```
 
+## Releasing
+
+Maintainer-only. PyPI publishes automatically on tagged releases.
+
+```bash
+# 1. Bump version in pyproject.toml
+# 2. Commit and tag
+git commit -am "Release v0.3.0"
+git tag v0.3.0
+git push origin main --tags
+```
+
+The GitHub Action builds, checks, and publishes to PyPI via trusted publishing (OIDC). The tag version **must** match the version in `pyproject.toml` or the workflow fails.
+
+**One-time setup** (already configured):
+1. On [pypi.org](https://pypi.org), go to *Your projects → humuter-cli → Publishing*
+2. Add a trusted publisher with: owner `rishsane`, repo `humuter-cli`, workflow `publish.yml`, environment `pypi`
+3. In the GitHub repo, create an environment named `pypi` (Settings → Environments → New environment)
+
 ## Contributing
 
 Issues and PRs welcome. If you find a bug or want a feature, open an issue on GitHub. For platform-level questions, DM [@mainhooman](https://t.me/mainhooman) on Telegram.
